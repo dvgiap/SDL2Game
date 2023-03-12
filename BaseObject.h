@@ -1,5 +1,5 @@
 #ifndef BASE_OBJECT_H_
-#define BASEOBJECT_H_
+#define BASE_OBJECT_H_
 
 #include "CommonFunc.h"
 
@@ -13,7 +13,7 @@ public:
 
     BaseObject();
     ~BaseObject();
-    void SetRect(const int &x, const int&y)
+    void SetRect(const int &x, const int &y)
     {
         rect_.x = x;
         rect_.y = y;
@@ -28,4 +28,4 @@ public:
 
 };
 
-#endif // BASEOBJECT_H_INCLUDED
+#endif

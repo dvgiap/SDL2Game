@@ -1,4 +1,3 @@
-﻿  BaseObject.cpp
-  main.cpp
-  Generating Code...
+﻿  main.cpp
+C:\VisualStudioProjects\SDL2Game\CommonFunc.h(41,2): warning C4091: 'typedef ': ignored on left of 'Map' when no variable is declared
   SDL2Game.vcxproj -> C:\VisualStudioProjects\SDL2Game\x64\Debug\SDL2Game.exe

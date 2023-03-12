@@ -1,5 +1,6 @@
 #include "CommonFunc.h"
 #include "BaseObject.h"
+#include "game_map.h"
 
 BaseObject g_background;
 bool init()
@@ -62,8 +63,8 @@ bool init()
 
 bool LoadBackground()
 {
-	bool ret = g_background.LoadImg("background.png", gScreen);
-	if (ret == false) return false;
+	bool ret = g_background.LoadImg("img/1.png", gScreen);
+	if (!ret) return false;
 	return true;
 }
 
@@ -78,9 +79,18 @@ void close()
 }
 int main(int argc, char* argv[])
 {
-	if (!init()) return -1;
-	if (LoadBackground() == false)
+	if (!init()) {
+		
 		return -1;
+	}
+	if (!LoadBackground()) {
+		printf("Couldn't loadbackground %s\n", SDL_GetError());
+		return -1;
+	}
+	GameMap game_map;
+	game_map.LoadMap("map/map01.dat");
+	game_map.LoadTiles(gScreen);
+
 	bool quit = false;
 	while (!quit)
 	{
@@ -96,6 +106,7 @@ int main(int argc, char* argv[])
 		SDL_RenderClear(gScreen);
 
 		g_background.Render(gScreen, NULL);
+		game_map.DrawMap(gScreen);
 
 		SDL_RenderPresent(gScreen);
 
