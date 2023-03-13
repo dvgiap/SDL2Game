@@ -1,4 +1,4 @@
-#ifndef BASE_OBJECT_H_
+﻿#ifndef BASE_OBJECT_H_
 #define BASE_OBJECT_H_
 
 #include "CommonFunc.h"
@@ -6,14 +6,14 @@
 class BaseObject
 {
 protected:
-    SDL_Texture* p_object_;
-    SDL_Rect rect_;
+    SDL_Rect rect_; // rectangle lưu vị trí, kích thước của texture
+    SDL_Texture* p_object_; // pointer lưu trữ texture
 
 public:
-
     BaseObject();
     ~BaseObject();
-    void SetRect(const int &x, const int &y)
+
+    void SetRect(const int &x, const int &y) // vị trí
     {
         rect_.x = x;
         rect_.y = y;
@@ -24,8 +24,6 @@ public:
     bool LoadImg (std::string path, SDL_Renderer *screen);
     void Render (SDL_Renderer * des, const SDL_Rect* clip = NULL);
     void Free();
-
-
 };
 
 #endif

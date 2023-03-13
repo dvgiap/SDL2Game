@@ -1,4 +1,4 @@
-#include "game_map.h"
+﻿#include "game_map.h"
 
 void GameMap::LoadMap(const char* name)
 {
@@ -33,13 +33,13 @@ void GameMap::LoadMap(const char* name)
 	fclose(fp);
 }
 
-void GameMap::LoadTiles(SDL_Renderer* screen)
+void GameMap::LoadTiles(SDL_Renderer* screen) // tải các ảnh cho từng ô, và lưu trong mảng tile_mat_
 {
 	char file_img[30];
 	FILE* fp = NULL;
 
 	for (int i = 0; i < MAX_TILES; i++) {
-		sprintf_s(file_img, "map/%d.png", i);
+		sprintf_s(file_img, "map_type4/%d.png", i);
 		fopen_s(&fp, file_img, "rb");
 		if (fp == NULL) continue;
 		fclose(fp);

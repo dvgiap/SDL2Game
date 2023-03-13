@@ -5,13 +5,12 @@
 BaseObject g_background;
 bool init()
 {
-	//Initialization flag
-	bool success = true;
+	bool success = true; //Initialization flag
 
 	//Initialize SDL
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 	{
-		printf("SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+		cout << "SDL could not initialize! SDL Error: \n" << SDL_GetError();
 		success = false;
 	}
 	else
@@ -19,18 +18,14 @@ bool init()
 		//Set texture filtering to linear
 		if (!SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1"))
 		{
-			printf("Warning: Linear texture filtering not enabled!");
+			cout << "Warning: Linear texture filtering not enabled!";
 		}
 
 		//Create window
-		gWindow = SDL_CreateWindow("SDL Tutorial",
-									SDL_WINDOWPOS_UNDEFINED,
-									SDL_WINDOWPOS_UNDEFINED,	
-									SCREEN_WIDTH, SCREEN_HEIGHT,
-									SDL_WINDOW_SHOWN);
+		gWindow = SDL_CreateWindow("SDL2.0 Game",SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 		if (gWindow == NULL)
 		{
-			printf("Window could not be created! SDL Error: %s\n", SDL_GetError());
+			cout << "Window could not be created! SDL Error: \n" << SDL_GetError();
 			success = false;
 		}
 		else
@@ -39,7 +34,7 @@ bool init()
 			gScreen = SDL_CreateRenderer(gWindow, -1, SDL_RENDERER_ACCELERATED);
 			if (gScreen == NULL)
 			{
-				printf("Renderer could not be created! SDL Error: %s\n", SDL_GetError());
+				cout << "Renderer could not be created! SDL Error: \n" << SDL_GetError();
 				success = false;
 			}
 			else
@@ -51,7 +46,7 @@ bool init()
 				int imgFlags = IMG_INIT_PNG;
 				if (!(IMG_Init(imgFlags) & imgFlags))
 				{
-					printf("SDL_image could not initialize! SDL_image Error: %s\n", IMG_GetError());
+					cout << "SDL_image could not initialize! SDL_image Error: \n" << IMG_GetError();
 					success = false;
 				}
 			}
@@ -63,7 +58,7 @@ bool init()
 
 bool LoadBackground()
 {
-	bool ret = g_background.LoadImg("img/1.png", gScreen);
+	bool ret = g_background.LoadImg("img/4.png", gScreen);
 	if (!ret) return false;
 	return true;
 }
@@ -80,15 +75,15 @@ void close()
 int main(int argc, char* argv[])
 {
 	if (!init()) {
-		
+		cout << "Couldn't init \n" << SDL_GetError();
 		return -1;
 	}
 	if (!LoadBackground()) {
-		printf("Couldn't loadbackground %s\n", SDL_GetError());
+		cout << "Couldn't load background \n" << SDL_GetError();
 		return -1;
 	}
 	GameMap game_map;
-	game_map.LoadMap("map/map01.dat");
+	game_map.LoadMap("map_type4/map.dat");
 	game_map.LoadTiles(gScreen);
 
 	bool quit = false;

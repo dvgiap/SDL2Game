@@ -8,6 +8,9 @@
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
 #include <stdio.h>
+#include <iostream>
+
+using namespace std;
 
 static SDL_Window* gWindow = NULL;
 static SDL_Renderer* gScreen = NULL;
@@ -39,6 +42,5 @@ typedef struct Map
 	int tile[MAX_MAP_Y][MAX_MAP_X];
 	const char* file_name_;
 };
-
 
 #endif
