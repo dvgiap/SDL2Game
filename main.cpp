@@ -92,7 +92,7 @@ int main(int argc, char* argv[])
 	game_map.LoadTiles(gScreen);
 
 	MainObject p_player;
-	p_player.LoadImg("images/player/p3/player_right.png", gScreen);
+	p_player.LoadImg("images/player/p5/player_right.png", gScreen);
 	p_player.set_clips();
 
 

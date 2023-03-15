@@ -63,11 +63,11 @@ void MainObject::Show(SDL_Renderer* des)
 	{
 		if (status_ == WALK_LEFT)
 		{
-			LoadImg("images/player/p3/player_left.png", des);
+			LoadImg("images/player/p5/player_left.png", des);
 		}
 		else
 		{
-			LoadImg("images/player/p3/player_right.png", des);
+			LoadImg("images/player/p5/player_right.png", des);
 		}
 	}
 	
@@ -86,14 +86,17 @@ void MainObject::Show(SDL_Renderer* des)
 		frame_ = 0;
 	}
 
-	rect_.x = x_pos_ - map_x_;
-	rect_.y = y_pos_ - map_y_;
+	if (come_back_time_ == 0)
+	{
+		rect_.x = x_pos_ - map_x_;
+		rect_.y = y_pos_ - map_y_;
 
-	SDL_Rect* current_clip = &frame_clip_[frame_];
+		SDL_Rect* current_clip = &frame_clip_[frame_];
 
-	SDL_Rect renderQuad = { rect_.x, rect_.y, width_frame_, height_frame_ };
+		SDL_Rect renderQuad = { rect_.x, rect_.y, width_frame_, height_frame_ };
 
-	SDL_RenderCopy(des, p_object_, current_clip, &renderQuad);
+		SDL_RenderCopy(des, p_object_, current_clip, &renderQuad);
+	}
 }
 
 void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
@@ -109,11 +112,11 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 			input_type_.left_ = 0;
 			if (on_ground == true)
 			{
-				LoadImg("images/player/p3/player_right.png", screen);
+				LoadImg("images/player/p5/player_right.png", screen);
 			}
 			else
 			{
-				LoadImg("images/player/p3/jump_right.png", screen);
+				LoadImg("images/player/p5/jump_right.png", screen);
 			}
 		}
 		break;
@@ -124,11 +127,11 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 			input_type_.right_ = 0;
 			if (on_ground == true)
 			{
-				LoadImg("images/player/p3/player_left.png", screen);
+				LoadImg("images/player/p5/player_left.png", screen);
 			}
 			else
 			{
-				LoadImg("images/player/p3/jump_left.png", screen);
+				LoadImg("images/player/p5/jump_left.png", screen);
 			}
 		}
 			break;
@@ -164,35 +167,50 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 void MainObject::DoPlayer(Map& map_data)
 {
 	if (come_back_time_ == 0)
-	x_val_ = 0;
-	y_val_ += GRAVITY_SPEED;
+	{
+		x_val_ = 0;
+		y_val_ += GRAVITY_SPEED;
 
-	if (y_val_ >= MAX_FALL_SPEED)
-	{
-		y_val_ = MAX_FALL_SPEED;
-	}
-
-	if (input_type_.left_ == 1)
-	{
-		x_val_ -= PLAYER_SPEED;
-	}
-	else if (input_type_.right_ == 1)
-	{
-		x_val_ += PLAYER_SPEED;
-	}
-
-	if (input_type_.jump_ == 1)
-	{
-		if (on_ground == true)
+		if (y_val_ >= MAX_FALL_SPEED)
 		{
-			y_val_ = - PLAYER_JUMP_VAL;
+			y_val_ = MAX_FALL_SPEED;
 		}
-		on_ground = false;
-		input_type_.jump_ = 0;
-	}
 
-	CheckToMap(map_data);
-	CenterEntityOnMap(map_data);
+		if (input_type_.left_ == 1)
+		{
+			x_val_ -= PLAYER_SPEED;
+		}
+		else if (input_type_.right_ == 1)
+		{
+			x_val_ += PLAYER_SPEED;
+		}
+
+		if (input_type_.jump_ == 1)
+		{
+			if (on_ground == true)
+			{
+				y_val_ = -PLAYER_JUMP_VAL;
+			}
+			on_ground = false;
+			input_type_.jump_ = 0;
+		}
+
+		CheckToMap(map_data);
+		CenterEntityOnMap(map_data);
+	}
+	
+	if (come_back_time_ > 0)
+	{
+		come_back_time_--;
+		if (come_back_time_ == 0)
+		{
+			if (x_pos_ > 256) x_pos_ -= 256;
+			else x_pos_ = 0;
+			y_pos_ = 0;
+			x_val_ = 0;
+			y_val_ = 0;
+		}
+	}
 }
 
 void MainObject::CenterEntityOnMap(Map& map_data)
