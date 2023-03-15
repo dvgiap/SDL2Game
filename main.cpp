@@ -1,6 +1,9 @@
 #include "CommonFunc.h"
 #include "BaseObject.h"
 #include "game_map.h"
+#include "MainObject.h"
+#include "ImpTimer.h"
+
 
 BaseObject g_background;
 bool init()
@@ -58,7 +61,7 @@ bool init()
 
 bool LoadBackground()
 {
-	bool ret = g_background.LoadImg("img/4.png", gScreen);
+	bool ret = g_background.LoadImg("images/background/2.png", gScreen);
 	if (!ret) return false;
 	return true;
 }
@@ -74,6 +77,8 @@ void close()
 }
 int main(int argc, char* argv[])
 {
+	ImpTimer fps_timer;
+
 	if (!init()) {
 		cout << "Couldn't init \n" << SDL_GetError();
 		return -1;
@@ -83,19 +88,28 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 	GameMap game_map;
-	game_map.LoadMap("map_type4/map.dat");
+	game_map.LoadMap("images/map/map_type1/map.dat");
 	game_map.LoadTiles(gScreen);
+
+	MainObject p_player;
+	p_player.LoadImg("images/player/p3/player_right.png", gScreen);
+	p_player.set_clips();
+
 
 	bool quit = false;
 	while (!quit)
 	{
+		fps_timer.start();
 		while (SDL_PollEvent(&e) != 0)
 		{
 			if (e.type == SDL_QUIT)
 			{
 				quit = true;
 			}
+
+			p_player.HandleInputAction(e, gScreen);
 		}
+
 		SDL_SetRenderDrawColor(gScreen, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR, RENDER_DRAW_COLOR);
 
 		SDL_RenderClear(gScreen);
@@ -103,7 +117,26 @@ int main(int argc, char* argv[])
 		g_background.Render(gScreen, NULL);
 		game_map.DrawMap(gScreen);
 
+		Map map_data = game_map.getMap();
+
+		p_player.SetMapXY(map_data.start_x_, map_data.start_y_);
+		p_player.DoPlayer(map_data);
+		p_player.Show(gScreen);
+
+		game_map.SetMap(map_data);
+		game_map.DrawMap(gScreen);
+
 		SDL_RenderPresent(gScreen);
+
+		int real_imp_time = fps_timer.get_ticks();
+		int time_one_frame = 1000 / FRAME_PER_SECOND; // (ms)
+
+		if (real_imp_time < time_one_frame)
+		{
+			int delay_time = time_one_frame - real_imp_time;
+			if (delay_time >= 0) SDL_Delay(delay_time);
+		}
+
 
 	}
 

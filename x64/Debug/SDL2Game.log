@@ -1,3 +1,26 @@
-﻿  main.cpp
-C:\VisualStudioProjects\SDL2Game\CommonFunc.h(44,2): warning C4091: 'typedef ': ignored on left of 'Map' when no variable is declared
+﻿  MainObject.cpp
+C:\VisualStudioProjects\SDL2Game\CommonFunc.h(44,2): warning C4091: 'typedef ': ignored on left of 'Input' when no variable is declared
+C:\VisualStudioProjects\SDL2Game\CommonFunc.h(56,2): warning C4091: 'typedef ': ignored on left of 'Map' when no variable is declared
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(89,19): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(90,19): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(168,25): warning C4305: '+=': truncation from 'double' to 'float'
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(200,29): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(210,29): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(232,25): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(233,44): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(235,14): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(236,36): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(244,17): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(253,23): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(261,16): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(262,28): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(264,25): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(265,45): warning C4244: '=': conversion from 'float' to 'int', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(271,16): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(281,22): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\VisualStudioProjects\SDL2Game\MainObject.cpp(295,43): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+  main.cpp
+C:\VisualStudioProjects\SDL2Game\CommonFunc.h(44,2): warning C4091: 'typedef ': ignored on left of 'Input' when no variable is declared
+C:\VisualStudioProjects\SDL2Game\CommonFunc.h(56,2): warning C4091: 'typedef ': ignored on left of 'Map' when no variable is declared
+  Generating Code...
   SDL2Game.vcxproj -> C:\VisualStudioProjects\SDL2Game\x64\Debug\SDL2Game.exe

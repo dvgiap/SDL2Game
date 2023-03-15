@@ -16,6 +16,7 @@ static SDL_Window* gWindow = NULL;
 static SDL_Renderer* gScreen = NULL;
 static SDL_Event e;
 
+const int FRAME_PER_SECOND = 100;
 const int SCREEN_WIDTH = 1280;
 const int SCREEN_HEIGHT = 640;
 const int SCREEN_BPP = 32;
@@ -30,6 +31,17 @@ const int RENDER_DRAW_COLOR = 0xff;
 
 #define MAX_MAP_X 400
 #define MAX_MAP_Y 10
+
+#define BLANK_TILE 0
+
+typedef struct Input
+{
+	int left_;
+	int right_;
+	int up_;
+	int down_;
+	int jump_;
+};
 
 typedef struct Map
 {
