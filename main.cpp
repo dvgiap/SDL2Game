@@ -88,7 +88,7 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 	GameMap game_map;
-	game_map.LoadMap("images/map/map_type1/map.dat");
+	game_map.LoadMap("images/map/map_type2/map.dat");
 	game_map.LoadTiles(gScreen);
 
 	MainObject p_player;

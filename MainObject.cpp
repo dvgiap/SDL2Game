@@ -1,5 +1,6 @@
 #include "MainObject.h"
 
+
 MainObject::MainObject()
 {
 	frame_ = 0;
@@ -9,8 +10,8 @@ MainObject::MainObject()
 	y_val_ = 0;
 	width_frame_ = 0;
 	height_frame_ = 0;
-	status_ = -1;
-	on_ground = false;
+	status_ = WALK_NONE;
+	on_ground_ = false;
 	map_x_ = 0;
 	map_y_ = 0;
 
@@ -59,7 +60,7 @@ void MainObject::set_clips()
 
 void MainObject::Show(SDL_Renderer* des)
 {
-	if (on_ground == true)
+	if (on_ground_ == true)
 	{
 		if (status_ == WALK_LEFT)
 		{
@@ -106,34 +107,20 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 		switch (events.key.keysym.sym)
 		{
 		case SDLK_RIGHT:
-		{
-			status_ = WALK_RIGHT;
-			input_type_.right_ = 1;
-			input_type_.left_ = 0;
-			if (on_ground == true)
 			{
-				LoadImg("images/player/p5/player_right.png", screen);
+				status_ = WALK_RIGHT;
+				input_type_.right_ = 1;
+				input_type_.left_ = 0;
+				UpdateImagePlayer(screen);
 			}
-			else
-			{
-				LoadImg("images/player/p5/jump_right.png", screen);
-			}
-		}
-		break;
+			break;
 		case SDLK_LEFT:
-		{
-			status_ = WALK_LEFT;
-			input_type_.left_ = 1;
-			input_type_.right_ = 0;
-			if (on_ground == true)
 			{
-				LoadImg("images/player/p5/player_left.png", screen);
+				status_ = WALK_LEFT;
+				input_type_.left_ = 1;
+				input_type_.right_ = 0;
+				UpdateImagePlayer(screen);
 			}
-			else
-			{
-				LoadImg("images/player/p5/jump_left.png", screen);
-			}
-		}
 			break;
 		}
 	}
@@ -142,15 +129,15 @@ void MainObject::HandleInputAction(SDL_Event events, SDL_Renderer* screen)
 		switch (events.key.keysym.sym)
 		{
 		case SDLK_RIGHT:
-		{
-			input_type_.right_ = 0;
-		}
-		break;
+			{
+				input_type_.right_ = 0;
+			}
+			break;
 		case SDLK_LEFT:
-		{
-			input_type_.left_ = 0;
-		}
-		break;
+			{
+				input_type_.left_ = 0;
+			}
+			break;
 		}
 	}
 
@@ -168,6 +155,7 @@ void MainObject::DoPlayer(Map& map_data)
 {
 	if (come_back_time_ == 0)
 	{
+		on_ground_ = false;
 		x_val_ = 0;
 		y_val_ += GRAVITY_SPEED;
 
@@ -187,11 +175,11 @@ void MainObject::DoPlayer(Map& map_data)
 
 		if (input_type_.jump_ == 1)
 		{
-			if (on_ground == true)
+			if (on_ground_ == true)
 			{
-				y_val_ = -PLAYER_JUMP_VAL;
+				y_val_ = - PLAYER_JUMP_VAL;
 			}
-			on_ground = false;
+			on_ground_ = false;
 			input_type_.jump_ = 0;
 		}
 
@@ -253,7 +241,14 @@ void MainObject::CheckToMap(Map& map_data)
 	y1 = y_pos_ / TILE_SIZE;
 	y2 = (y_pos_ + height_frame_ - 1) / TILE_SIZE;
 
-	if (x1 >= 0 && x2 < MAX_MAP_X && y1 >= 0 && y2 <= MAX_MAP_Y)
+	/*
+			(x1,y1)				(x2,y1)
+	
+	
+			(x1,y2)				(x2,y2)
+	*/
+
+	if (x1 >= 0 && x2 < MAX_MAP_X && y1 >= 0 && y2 < MAX_MAP_Y)
 	{
 		if (x_val_ > 0)
 		{
@@ -274,6 +269,8 @@ void MainObject::CheckToMap(Map& map_data)
 		}
 	}
 
+
+	// check vertical
 	int width_min = width_frame_ < TILE_SIZE ? width_frame_ : TILE_SIZE;
 
 	x1 = (x_pos_) / TILE_SIZE;
@@ -284,22 +281,28 @@ void MainObject::CheckToMap(Map& map_data)
 
 	if (x1 >= 0 && x2 < MAX_MAP_X && y1 >= 0 && y2 < MAX_MAP_Y)
 	{
-		if (map_data.tile[y2][x1] != BLANK_TILE || map_data.tile[y2][x2] != BLANK_TILE)
+		if (y_val_ > 0)
 		{
-			y_pos_ = y2 * TILE_SIZE;
-			y_pos_ -= (height_frame_ + 1);
-			y_val_ = 0;
-			on_ground = true;
+			if (map_data.tile[y2][x1] != BLANK_TILE || map_data.tile[y2][x2] != BLANK_TILE)
+			{
+				y_pos_ = y2 * TILE_SIZE;
+				y_pos_ -= (height_frame_ + 1);
+				y_val_ = 0;
+
+				on_ground_ = true;
+				if (status_ == WALK_NONE) status_ = WALK_RIGHT;
+			}
+		}
+		else if (y_val_ < 0)
+		{
+			if (map_data.tile[y1][x1] != BLANK_TILE || map_data.tile[y1][x2] != BLANK_TILE)
+			{
+				y_pos_ = (y1 + 1) * TILE_SIZE;
+				y_val_ = 0;
+			}
 		}
 	}
-	else if (y_val_ < 0)
-	{
-		if (map_data.tile[y1][x1] != BLANK_TILE || map_data.tile[y1][x2] != BLANK_TILE)
-		{
-			y_pos_ = (y1 + 1) * TILE_SIZE;
-			y_val_ = 0;
-		}
-	}
+	
 
 	x_pos_ += x_val_;
 	y_pos_ += y_val_;
@@ -317,4 +320,32 @@ void MainObject::CheckToMap(Map& map_data)
 	{
 		come_back_time_ = 60;
 	}
+}
+
+void MainObject::UpdateImagePlayer(SDL_Renderer* des)
+{
+	if (on_ground_ == true)
+	{
+		if (status_ == WALK_LEFT)
+		{
+			LoadImg("images/player/p5/player_left.png", des);
+		}
+		else
+		{
+			LoadImg("images/player/p5/player_right.png", des);
+		}
+	}
+	else
+	{
+		on_ground_ = true;
+		if (status_ == WALK_LEFT)
+		{
+			LoadImg("images/player/p5/jump_left.png", des);
+		}
+		else
+		{
+			LoadImg("images/player/p5/jump_right.png", des);
+		}
+	}
+	
 }
