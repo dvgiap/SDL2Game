@@ -3,13 +3,13 @@
 
 #include <windows.h>
 #include <string>
+#include <vector>
 #include <SDL.h>
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 #include <SDL_ttf.h>
 #include <stdio.h>
 #include <iostream>
-
 using namespace std;
 
 static SDL_Window* gWindow = NULL;
@@ -34,6 +34,8 @@ const int RENDER_DRAW_COLOR = 0xff;
 #define MAX_MAP_Y 10
 
 #define BLANK_TILE 0
+
+#define STATE_MONEY 14
 
 typedef struct Input
 {

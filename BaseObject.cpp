@@ -18,6 +18,7 @@ BaseObject :: ~BaseObject()
 
 bool BaseObject::LoadImg(std::string path, SDL_Renderer* screen) // tải ảnh và tạo texture mới 
 {
+    Free();
     SDL_Texture* new_texture = NULL;
 
     SDL_Surface* load_surface = IMG_Load(path.c_str());

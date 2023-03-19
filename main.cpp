@@ -3,6 +3,7 @@
 #include "game_map.h"
 #include "MainObject.h"
 #include "ImpTimer.h"
+#include "ThreatsObject.h"
 
 
 BaseObject g_background;
@@ -61,7 +62,7 @@ bool init()
 
 bool LoadBackground()
 {
-	bool ret = g_background.LoadImg("images/background/2.png", gScreen);
+	bool ret = g_background.LoadImg("images/background.png", gScreen);
 	if (!ret) return false;
 	return true;
 }
@@ -75,6 +76,60 @@ void close()
 	SDL_DestroyWindow(gWindow);
 	gWindow = NULL;
 }
+
+vector<ThreatsObject*> MakeThreatList()
+{
+	vector<ThreatsObject*> list_threats;
+
+	ThreatsObject* dynamic_threats = new ThreatsObject[20];
+
+	for (int i = 0; i < 20; i++)
+	{
+		ThreatsObject* p_threat = dynamic_threats + i;
+		if (p_threat != NULL)
+		{
+			p_threat->LoadImg("images/thread_left.png", gScreen);
+			p_threat->set_clips();
+			p_threat->set_type_move(ThreatsObject::MOVE_IN_SPACE_THREAT);
+
+			p_threat->set_x_pos(500 + i * 500);
+			p_threat->set_y_pos(200);
+
+			int pos1 = p_threat->get_x_pos() - 60;
+			int pos2 = p_threat->get_x_pos() + 60;
+			p_threat->SetAnimationPos(pos1, pos2);
+			p_threat->set_input_left(1);
+
+			list_threats.push_back(p_threat);
+		}
+	}
+
+	ThreatsObject* threats_objs = new ThreatsObject[20];
+
+	for (int i = 0; i < 20; i++)
+	{
+		ThreatsObject* p_threat = threats_objs + i;
+		if (p_threat != NULL)
+		{
+			p_threat->LoadImg("images/threats1.png", gScreen);
+			p_threat->set_clips();
+			p_threat->set_x_pos(700 + i*1200);
+			p_threat->set_y_pos(250);
+			p_threat->set_type_move(ThreatsObject::STATIC_THREAT);
+			p_threat->set_input_left(0);
+
+			BulletObject* p_bullet = new BulletObject();
+			p_threat->InitBullet(p_bullet, gScreen);
+
+			list_threats.push_back(p_threat);
+		}
+	}
+
+	return list_threats;
+}
+
+
+
 int main(int argc, char* argv[])
 {
 	ImpTimer fps_timer;
@@ -88,12 +143,15 @@ int main(int argc, char* argv[])
 		return -1;
 	}
 	GameMap game_map;
-	game_map.LoadMap("images/map/map_type2/map.dat");
+	game_map.LoadMap("images/map.dat");
 	game_map.LoadTiles(gScreen);
 
 	MainObject p_player;
-	p_player.LoadImg("images/player/p5/player_right.png", gScreen);
+	p_player.LoadImg("images/player_right.png", gScreen);
 	p_player.set_clips();
+
+	vector<ThreatsObject*> threats_list = MakeThreatList();
+
 
 
 	bool quit = false;
@@ -119,12 +177,28 @@ int main(int argc, char* argv[])
 
 		Map map_data = game_map.getMap();
 
+		p_player.HandleBullet(gScreen);
+
 		p_player.SetMapXY(map_data.start_x_, map_data.start_y_);
 		p_player.DoPlayer(map_data);
 		p_player.Show(gScreen);
 
 		game_map.SetMap(map_data);
 		game_map.DrawMap(gScreen);
+
+		for (int i = 0; i < threats_list.size(); i++)
+		{
+			ThreatsObject* p_threat = threats_list.at(i);
+			if (p_threat != NULL)
+			{
+				p_threat->SetMapXY(map_data.start_x_, map_data.start_y_);
+				p_threat->ImpMoveType(gScreen);
+				p_threat->DoPlayer(map_data);
+				p_threat->MakeBullet(gScreen, SCREEN_WIDTH, SCREEN_HEIGHT);
+				p_threat->Show(gScreen);
+			}
+		}
+
 
 		SDL_RenderPresent(gScreen);
 
@@ -138,6 +212,16 @@ int main(int argc, char* argv[])
 		}
 
 
+	}
+
+	for (int i = 0; i < threats_list.size(); i++)
+	{
+		ThreatsObject* p_threat = threats_list.at(i);
+		if (p_threat != NULL)
+		{
+			p_threat->Free();
+			p_threat = NULL;
+		}
 	}
 
 	close();
