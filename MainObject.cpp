@@ -43,6 +43,18 @@ bool MainObject::LoadImg(string path, SDL_Renderer* screen)
 	return ret;
 }
 
+
+SDL_Rect MainObject::GetRectFrame()
+{
+	SDL_Rect rect;
+	rect.x = rect_.x;
+	rect.y = rect_.y;
+	rect.w = width_frame_;
+	rect.h = height_frame_;
+
+	return rect;
+}
+
 void MainObject::set_clips()
 {
 	if (width_frame_ > 0 && height_frame_ > 0)
@@ -200,7 +212,21 @@ void MainObject::HandleBullet(SDL_Renderer* des)
 	}
 }
 
+void MainObject::RemoveBullet(const int& idx)
+{
+	int size = p_bullet_list_.size();
+	if (size > 0 && idx < size)
+	{
+		BulletObject* p_bullet = p_bullet_list_.at(idx);
+		p_bullet_list_.erase(p_bullet_list_.begin() + idx);
 
+		if (p_bullet)
+		{
+			delete p_bullet;
+			p_bullet = NULL;
+		}
+	}
+}
 
 void MainObject::DoPlayer(Map& map_data)
 {
@@ -290,7 +316,7 @@ void MainObject::CheckToMap(Map& map_data)
 	x2 = (x_pos_ + x_val_ + width_frame_ - 1) / TILE_SIZE;
 
 	y1 = y_pos_ / TILE_SIZE;
-	y2 = (y_pos_ + height_frame_ - 1) / TILE_SIZE;
+	y2 = (y_pos_ + height_min - 1) / TILE_SIZE;
 
 	/*
 			(x1,y1)				(x2,y1)

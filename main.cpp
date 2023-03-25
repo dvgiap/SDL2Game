@@ -196,6 +196,71 @@ int main(int argc, char* argv[])
 				p_threat->DoPlayer(map_data);
 				p_threat->MakeBullet(gScreen, SCREEN_WIDTH, SCREEN_HEIGHT);
 				p_threat->Show(gScreen);
+
+
+				SDL_Rect rect_player = p_player.GetRectFrame();
+				bool bCol1 = false;
+				std::vector<BulletObject*> tBuller_list = p_threat->get_bullet_list();
+				for (int jj = 0; jj < tBuller_list.size(); ++jj)
+				{
+					BulletObject* pt_bullet = tBuller_list.at(jj);
+					if (pt_bullet)
+					{
+						bCol1 = SDLCommonFunc::CheckCollision(pt_bullet->GetRect(), rect_player);
+						if (bCol1)
+						{
+							p_threat->RemoveBullet(jj);
+							break;
+						}
+					}
+				}
+
+				SDL_Rect rect_threat = p_threat->GetRectFrame();
+				bool bCol2 = SDLCommonFunc::CheckCollision(rect_player, rect_threat);
+
+				if (bCol1 || bCol2)
+				{
+					if (MessageBox(NULL, L"GAME OVER", L"Info", MB_OK | MB_ICONSTOP) == IDOK)
+					{
+						p_threat->Free();
+						close();
+						SDL_Quit();
+						return 0;
+					}
+				}
+
+			}
+		}
+
+		vector <BulletObject*> bullet_arr = p_player.get_bullet_list();
+
+		for (int r = 0; r < bullet_arr.size(); r++)
+		{
+			BulletObject* p_bullet = bullet_arr.at(r);
+			if (p_bullet != NULL)
+			{
+				for (int t = 0; t < threats_list.size(); t++)
+				{
+					ThreatsObject* obj_threat = threats_list.at(t);
+					if (obj_threat != NULL)
+					{
+						SDL_Rect tRect; // applied for threats
+						tRect.x = obj_threat->GetRect().x;
+						tRect.y = obj_threat->GetRect().y;
+						tRect.w = obj_threat->get_width_frame();
+						tRect.h = obj_threat->get_height_frame();
+
+						SDL_Rect bRect = p_bullet->GetRect(); // applied for bullet (bullet has no frame clip)
+
+						bool bCol = SDLCommonFunc::CheckCollision(bRect, tRect);
+						if (bCol)
+						{
+							p_player.RemoveBullet(r);
+							obj_threat->Free();
+							threats_list.erase(threats_list.begin() + t);
+						}
+					}
+				}
 			}
 		}
 

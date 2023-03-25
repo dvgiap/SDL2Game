@@ -8,8 +8,8 @@
 
 #define GRAVITY_SPEED 0.8
 #define MAX_FALL_SPEED 10
-#define PLAYER_SPEED 8
-#define PLAYER_JUMP_VAL 18
+#define PLAYER_SPEED 10
+#define PLAYER_JUMP_VAL 20
 
 class MainObject : public BaseObject
 {
@@ -37,12 +37,18 @@ public:
 	void CenterEntityOnMap(Map& map_data);
 	void UpdateImagePlayer(SDL_Renderer* des);
 
+
+	SDL_Rect GetRectFrame();
+
+
 	void  set_bullet_list(vector<BulletObject*> bullet_list)
 	{
 		p_bullet_list_ = bullet_list;
 	}
 	vector<BulletObject*> get_bullet_list() const { return p_bullet_list_; }
 	void HandleBullet(SDL_Renderer* des);
+
+	void RemoveBullet(const int& idx);
 
 	void IncreaseMoney();
 private:

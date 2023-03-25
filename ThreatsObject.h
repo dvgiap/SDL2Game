@@ -54,11 +54,14 @@ public:
 	void set_input_left(const int& ipLeft) { input_type_.left_ = ipLeft; }
 	void ImpMoveType(SDL_Renderer* screen);
 
+	SDL_Rect GetRectFrame();
+
 	vector<BulletObject*> get_bullet_list() const { return bullet_list_; }
 	void set_bullet_list(const vector<BulletObject*>& bl_list) { bullet_list_ = bl_list; }
 
 	void InitBullet(BulletObject* p_bullet, SDL_Renderer* screen);
 	void MakeBullet(SDL_Renderer* screen, const int& x_limit, const int& y_limit);
+	void RemoveBullet(const int& idx);
 
 private:
 
